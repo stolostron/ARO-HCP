@@ -33,7 +33,7 @@ deploy-server:
 		--set image.base=${MAESTRO_BASE_IMAGE} \
 		--set image.tag=${MAESTRO_TAG} \
 		--set database.containerizedDb=true \
-		--set database.ssl=disable
+		--set database.ssl=disable || true
 
 deploy-agent:
 	MAESTRO_MI_CLIENT_ID=$(shell az identity show \
@@ -52,7 +52,7 @@ deploy-agent:
 		--set azure.clientId=$${MAESTRO_MI_CLIENT_ID} \
 		--set azure.tenantId=$${TENANT_ID} \
 		--set image.base=${MAESTRO_BASE_IMAGE} \
-		--set image.tag=${MAESTRO_TAG}
+		--set image.tag=${MAESTRO_TAG} || true
 
 register-agent:
 ifeq ($(strip ${CONSUMER_NAME}),)
@@ -64,6 +64,6 @@ endif
 	fi
 	helm upgrade --install ${CONSUMER_NAME} deploy/helm/registration \
 		--namespace maestro \
-		--set consumerName=${CONSUMER_NAME}
+		--set consumerName=${CONSUMER_NAME} || true
 
 .PHONY: deploy-server deploy-agent register-agent

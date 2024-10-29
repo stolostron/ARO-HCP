@@ -129,11 +129,11 @@ region: regionalRg
 		--parameters \
 			configurations/region.bicepparam \
 		--parameters \
-			currentUserId=$(CURRENTUSER)
+			currentUserId=$(CURRENTUSER) || true
 .PHONY: region
 
 # cluster: rg cleanup-orphaned-rolebindings region acr
-cluster: rg cleanup-orphaned-rolebindings region
+cluster: rg region
 ifndef AKSCONFIG
 	$(error "Must set AKSCONFIG")
 endif
@@ -146,7 +146,7 @@ endif
 			configurations/$(AKSCONFIG).bicepparam \
 		--parameters \
 			currentUserId=$(CURRENTUSER) \
-			regionalResourceGroup=$(REGIONAL_RESOURCEGROUP)
+			regionalResourceGroup=$(REGIONAL_RESOURCEGROUP) || true
 .PHONY: cluster
 
 cluster-what-if: rg
